@@ -17,11 +17,15 @@ public class Board {
 	}
 
 	/**
-	 * enum indicating if a square is occupied or available.
+	 * enum indicating if a square is has a piece on it or is available.
 	 */
-	private enum Square {
+	public enum Square {
 		AVAILABLE,
-		OCCUPIED
+		CIRCLE,
+		CROSS;
+		boolean isOccupied() {
+			return (this != AVAILABLE);
+		}
 	}
 
 	private static final int WINNING_STREAK = 4;
@@ -44,33 +48,35 @@ public class Board {
 	 */
 	private void prepareGrid() {
 		this.grid = new Square[this.size][this.size];
-		for (Square[] row : this.grid)
-			for (Square square : row)
-				square = Square.AVAILABLE;
+		for (int y = 0; y < size; y++)
+			for (int x = 0; x < size; x++)
+				this.grid[y][x] = Square.AVAILABLE;
 	}
 
 	/**
 	 * Tries to place a piece on the board.
 	 * @param x the column where the piece is tried to be placed.
 	 * @param y the row where the piece is tried to be placed.
+	 * @param square the type of piece.
 	 * @return PlacementState indicating its success.
 	 */
-	public PlacementState tryToPlace(int x, int y) {
+	public PlacementState tryToPlace(int x, int y, Square square) {
 		if (x < 0 || y < 0 || x >= this.size || y >= this.size)
 			return PlacementState.OUT_OF_BOUNDS;
-		if (this.grid[y][x] == Square.OCCUPIED)
+		if (this.grid[y][x].isOccupied())
 			return PlacementState.OCCUPIED;
-		this.grid[y][x] = Square.OCCUPIED;
+		this.grid[y][x] = square;
 		return PlacementState.SUCCESS;
 	}
 
 	/**
 	 * Checks wether the board has consecutively WINNING_STREAK pieces
 	 * in any line, where line is either horizontal, vertical, or diagonal.
+	 * @param square the type of piece.
 	 * @return a boolean indicating if such is the case.
 	 */
-	public boolean hasWon() {
-		return nonDiagonalWin() || DiagonalWin();
+	public boolean hasWon(Square square) {
+		return nonDiagonalWin(square) || DiagonalWin(square);
 	}
 
 	/**
@@ -78,16 +84,16 @@ public class Board {
 	 * pieces in any horizontal or vertical line.
 	 * @return a boolean indicating if such is the case
 	 */
-	private boolean nonDiagonalWin() {
+	private boolean nonDiagonalWin(Square square) {
 		int rowStreak = 0;
 		int columnStreak = 0;
 		for (int x = 0; x < this.size; x++) {
 			for (int y = 0; y < this.size; y++) {
-				if (this.grid[y][x] == Square.OCCUPIED)
+				if (this.grid[y][x] == square)
 					columnStreak++;
 				else
 					columnStreak = 0;
-				if (this.grid[x][y] == Square.OCCUPIED)
+				if (this.grid[x][y] == square)
 					rowStreak++;
 				else
 					rowStreak = 0;
@@ -102,24 +108,25 @@ public class Board {
 	/**
 	 * Checks wether the board has consecutively
 	 * WINNING_STREAK pieces in any diagonal line.
+	 * @param square the type of piece.
 	 * @return a boolean indicating if such is the case
 	 */
-	private boolean DiagonalWin() {
+	private boolean DiagonalWin(Square square) {
 		// Check SouthWest half for a positively traversing diagonal
 		for (int i = 0; i <= this.size - WINNING_STREAK; i++)
-			if (checkDiagonal(0, i, true))
+			if (checkDiagonal(square, 0, i, true))
 				return true;
 		// Check NorthEast half for a positively traversing diagonal
 		for (int i = 0; i <= this.size - WINNING_STREAK; i++)
-			if (checkDiagonal(i, 0, true))
+			if (checkDiagonal(square, i, 0, true))
 				return true;
 		// Check NorthWest half for a negatively traversing diagonal
 		for (int i = WINNING_STREAK - 1; i < this.size; i++)
-			if (checkDiagonal(0, i, false))
+			if (checkDiagonal(square, 0, i, false))
 				return true;
 		// Check SouthEast half for a negatively traversing diagonal
 		for (int i = 0; i <= this.size - WINNING_STREAK; i++)
-			if (checkDiagonal(i, this.size - 1, false))
+			if (checkDiagonal(square, i, this.size - 1, false))
 				return true;
 		return false;
 	}
@@ -127,6 +134,7 @@ public class Board {
 	/**
 	 * Checks wether the board has WINNING_STREAK pieces in a particular
 	 * diagonal line.
+	 * @param square the type of piece.
 	 * @param startX the starting column of the diagonal traversion
 	 * @param startY the starting row of the diagonal traversion
 	 * @param traversePositively indicated wether the diagonal traverses
@@ -135,6 +143,7 @@ public class Board {
 	 * WINNING_STREAK pieces in it.
 	 */
 	private boolean checkDiagonal(
+			Square square,
 			int startX, int startY,
 			boolean traversePositively) {
 		int dy = (traversePositively) ? 1 : -1;
@@ -143,7 +152,7 @@ public class Board {
 				x < this.size &&
 				0 <= y &&
 				y < this.size; x++, y += dy) {
-			if (this.grid[y][x] == Square.OCCUPIED)
+			if (this.grid[y][x] == square)
 				diagonalStreak++;
 			else
 				diagonalStreak = 0;
