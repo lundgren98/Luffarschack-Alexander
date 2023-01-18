@@ -1,5 +1,6 @@
 package se.nackademin;
 
+
 /**
  * The gameboard where pieces are placed.
  */
@@ -26,6 +27,15 @@ public class Board {
 		boolean isOccupied() {
 			return (this != AVAILABLE);
 		}
+		@Override
+		public String toString() {
+			switch (this) {
+				case AVAILABLE: return ".";
+				case CIRCLE: return "O";
+				case CROSS: return "X";
+				default: return "Something went awfully wrong!";
+			}
+		}
 	}
 
 	private static final int WINNING_STREAK = 4;
@@ -51,6 +61,18 @@ public class Board {
 		for (int y = 0; y < size; y++)
 			for (int x = 0; x < size; x++)
 				this.grid[y][x] = Square.AVAILABLE;
+	}
+
+	@Override
+	public String toString() {
+		String retVal = "";
+		for (Square[] row : this.grid) {
+			for (Square square : row) {
+				retVal += square.toString();
+			}
+			retVal += "\n";
+		}
+		return retVal;
 	}
 
 	/**
