@@ -30,12 +30,45 @@ public class BoardTest {
 	}
 
 	@Test
-	public void hasWonShouldReturnTrue() {
+	public void hasWonHorizontalShouldReturnTrue() {
+		Board board = new Board(4);
+		board.tryToPlace(0,0);
+		board.tryToPlace(1,0);
+		board.tryToPlace(2,0);
+		board.tryToPlace(3,0);
+		boolean won = board.hasWon();
+		assertTrue(won);
+	}
+
+	@Test
+	public void hasWonVerticalShouldReturnTrue() {
+		Board board = new Board(4);
+		board.tryToPlace(0,0);
+		board.tryToPlace(0,1);
+		board.tryToPlace(0,2);
+		board.tryToPlace(0,3);
+		boolean won = board.hasWon();
+		assertTrue(won);
+	}
+
+	@Test
+	public void hasWonPosDiagShouldReturnTrue() {
 		Board board = new Board(4);
 		board.tryToPlace(0,0);
 		board.tryToPlace(1,1);
 		board.tryToPlace(2,2);
 		board.tryToPlace(3,3);
+		boolean won = board.hasWon();
+		assertTrue(won);
+	}
+
+	@Test
+	public void hasWonNegDiagShouldReturnTrue() {
+		Board board = new Board(4);
+		board.tryToPlace(3,0);
+		board.tryToPlace(2,1);
+		board.tryToPlace(1,2);
+		board.tryToPlace(0,3);
 		boolean won = board.hasWon();
 		assertTrue(won);
 	}
