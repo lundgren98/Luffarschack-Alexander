@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 public class Human implements Player {
+	private Scanner sc = new Scanner(System.in);
+
 	/**
 	 * Lets the user select a square on the board to place his piece on.
 	 * @return the cordinates for the piece.
@@ -21,9 +23,7 @@ public class Human implements Player {
 	 * @return the string the user wrote
 	 */
 	private String getUserInput() {
-		Scanner sc = new Scanner(System.in);
 		String userInput = sc.nextLine();
-		sc.close();
 		return userInput;
 	}
 
