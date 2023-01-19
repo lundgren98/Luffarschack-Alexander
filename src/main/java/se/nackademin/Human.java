@@ -56,6 +56,7 @@ public class Human implements Player {
 		return Arrays.asList(str.split(":"))
 			.stream()
 			.map(s -> Integer.parseInt(s))
-			.mapToInt(i -> i).toArray();
+			.mapToInt(i -> i)
+			.toArray();
 	}
 }
