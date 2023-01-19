@@ -41,6 +41,7 @@ public class Board {
 	private static final int WINNING_STREAK = 4;
 
 	private int size = 1;
+	public int getSize() { return this.size; }
 	private Square[][] grid;
 
 	/**

@@ -14,7 +14,7 @@ public class Play extends GenericPlay {
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
 		this.playerList.add(new Human());
-		this.playerList.add(new Human());
+		this.playerList.add(new AI());
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class Play extends GenericPlay {
 		PlacementState placement;
 		System.out.println(this.board);
 		do {
-			pos = player.selectPlacement();
+			pos = player.selectPlacement(this.board);
 			placement = this.board.tryToPlace(pos[0], pos[1], square);
 		} while (placement != PlacementState.SUCCESS);
 		return this.board.hasWon(square);
