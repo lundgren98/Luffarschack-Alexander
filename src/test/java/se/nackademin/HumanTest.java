@@ -14,7 +14,7 @@ public class HumanTest {
 	public void selectPlacementShouldReturnTuple() {
 		System.setIn(new ByteArrayInputStream("5:2".getBytes()));
 		Human human = new Human();
-		int[] got = human.selectPlacement();
+		int[] got = human.selectPlacement(new Board(6));
 		int[] expected = { 5, 2 };
 		assertTrue(Arrays.equals(expected, got));
 	}

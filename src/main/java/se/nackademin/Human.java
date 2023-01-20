@@ -10,7 +10,7 @@ public class Human implements Player {
 	 * Lets the user select a square on the board to place his piece on.
 	 * @return the cordinates for the piece.
 	 */
-	public int[] selectPlacement() {
+	public int[] selectPlacement(Board board) {
 		String userInput;
 		do {
 			userInput = getUserInput();
