@@ -25,15 +25,22 @@ public class FileIO {
 		saveLinesToFile(lines, path);
 	}
 	public void saveToFile(List<Turn> turns) throws IOException {
-		Files.createDirectories(Paths.get("saves/"));
-		Path path = Paths.get("saves/save.csv");
+		Path dir = Paths.get("saves/");
+		Files.createDirectories(dir);
+		int fileNumber = dir.toFile().list().length;
+		Path path = Paths.get(
+				"saves/save"
+				+ Integer.toString(fileNumber)
+				+ ".csv");
 		List<String> lines = turnListToStringList(turns);
 		saveLinesToFile(lines, path);
 	}
 	public void saveLinesToFile(List<String> lines, Path path) throws IOException {
 		for (String line : lines) {
-			Files.writeString(path, line,
-				StandardOpenOption.CREATE_NEW);
+			StandardOpenOption opt = (path.toFile().exists())
+				? StandardOpenOption.APPEND
+				: StandardOpenOption.CREATE;
+			Files.writeString(path, line, opt);
 		}
 	}
 	private List<String> turnListToStringList(List<Turn> turns) {
@@ -50,7 +57,7 @@ public class FileIO {
 		};
 	}
 	private String toCSV(String[] vals) {
-		return String.join(",", vals);
+		return String.join(",", vals) + "\n";
 	}
 	public void ReadFromFile() {}
 }

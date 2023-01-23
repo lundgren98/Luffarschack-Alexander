@@ -13,6 +13,7 @@ import se.nackademin.Board.Square;
 public class Play extends GenericPlay {
 
 	public Play() {
+		this.fio = new FileIO();
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
 		this.playerList.add(new AI());
