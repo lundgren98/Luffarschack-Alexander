@@ -84,4 +84,11 @@ public class FileIO {
 		};
 		return new Turn(piece, row, col);
 	};
+	public List<String[]> ReadStatsFromFIle() throws IOException {
+		Path file = Paths.get(STATS_FILE);
+		return Files.readAllLines(file)
+			.stream()
+			.map(s -> s.split(","))
+			.toList();
+	}
 }
