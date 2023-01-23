@@ -1,6 +1,8 @@
 package se.nackademin;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.nackademin.Board.PlacementState;
 import se.nackademin.Board.Square;
@@ -11,32 +13,54 @@ import se.nackademin.Board.Square;
 public class Play extends GenericPlay {
 
 	public Play() {
+		this.fio = new FileIO();
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
 		this.playerList.add(new Human());
-		this.playerList.add(new Human());
+		this.playerList.add(new AI());
 	}
+
+	public enum PlayerWin {
+		FALSE,
+		CIRCLE,
+		CROSS,
+		TIE
+	}
+
+	private List<Turn> turns = new ArrayList<Turn>();
+	private int numberOfTurns = 0;
 
 	/**
 	 * Run the game
 	 */
 	public void run() {
-		while (playersTakeTurns());
+		PlayerWin pw = PlayerWin.FALSE;
+		while ((pw = playersTakeTurns()) == PlayerWin.FALSE);
+		try {
+			fio.saveToFile(pw, numberOfTurns);
+			fio.saveToFile(turns);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Let each player take a turn
 	 * @return a boolean indicating in the game should continue.
 	 */
-	private boolean playersTakeTurns() {
+	private PlayerWin playersTakeTurns() {
+		this.numberOfTurns++;
 		boolean firstPlayerTurn = true;
 		for (Player player : this.playerList) {
-			Square square = (firstPlayerTurn) ? Square.CIRCLE : Square.CROSS;
-			if (aPlayerTurn(player, square))
-				return false;
+			Square square = (firstPlayerTurn)
+				? Square.CIRCLE
+				: Square.CROSS;
+			PlayerWin pw = aPlayerTurn(player, square);
+			if (pw != PlayerWin.FALSE)
+				return pw;
 			firstPlayerTurn = !firstPlayerTurn;
 		}
-		return true;
+		return PlayerWin.FALSE;
 	}
 
 	/**
@@ -45,14 +69,21 @@ public class Play extends GenericPlay {
 	 * @param square the piece the player places.
 	 * @return a boolean indicating if the player has won.
 	 */
-	private boolean aPlayerTurn(Player player, Square square) {
+	private PlayerWin aPlayerTurn(Player player, Square square) {
 		int[] pos;
 		PlacementState placement;
 		System.out.println(this.board);
 		do {
-			pos = player.selectPlacement();
+			pos = player.selectPlacement(this.board);
 			placement = this.board.tryToPlace(pos[0], pos[1], square);
 		} while (placement != PlacementState.SUCCESS);
-		return this.board.hasWon(square);
+		this.turns.add(new Turn(square, pos[1], pos[0]));
+		if (this.board.isTied())
+			return PlayerWin.TIE;
+		if (this.board.hasWon(square))
+			return (square == Square.CIRCLE)
+				? PlayerWin.CIRCLE
+				: PlayerWin.CROSS;
+		return PlayerWin.FALSE;
 	}
 }

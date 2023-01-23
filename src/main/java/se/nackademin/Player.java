@@ -1,5 +1,5 @@
 package se.nackademin;
 
 public interface Player {
-	public int[] selectPlacement();
+	public int[] selectPlacement(Board board);
 }
