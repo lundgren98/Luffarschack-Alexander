@@ -16,7 +16,7 @@ public class Play extends GenericPlay {
 		this.fio = new FileIO();
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
-		this.playerList.add(new AI());
+		this.playerList.add(new Human());
 		this.playerList.add(new AI());
 	}
 
@@ -55,10 +55,9 @@ public class Play extends GenericPlay {
 			Square square = (firstPlayerTurn)
 				? Square.CIRCLE
 				: Square.CROSS;
-			if (aPlayerTurn(player, square))
-				return (square == Square.CIRCLE)
-					? PlayerWin.CIRCLE
-					: PlayerWin.CROSS;
+			PlayerWin pw = aPlayerTurn(player, square);
+			if (pw != PlayerWin.FALSE)
+				return pw;
 			firstPlayerTurn = !firstPlayerTurn;
 		}
 		return PlayerWin.FALSE;
@@ -70,7 +69,7 @@ public class Play extends GenericPlay {
 	 * @param square the piece the player places.
 	 * @return a boolean indicating if the player has won.
 	 */
-	private boolean aPlayerTurn(Player player, Square square) {
+	private PlayerWin aPlayerTurn(Player player, Square square) {
 		int[] pos;
 		PlacementState placement;
 		System.out.println(this.board);
@@ -79,6 +78,12 @@ public class Play extends GenericPlay {
 			placement = this.board.tryToPlace(pos[0], pos[1], square);
 		} while (placement != PlacementState.SUCCESS);
 		this.turns.add(new Turn(square, pos[1], pos[0]));
-		return this.board.hasWon(square);
+		if (this.board.isTied())
+			return PlayerWin.TIE;
+		if (this.board.hasWon(square))
+			return (square == Square.CIRCLE)
+				? PlayerWin.CIRCLE
+				: PlayerWin.CROSS;
+		return PlayerWin.FALSE;
 	}
 }

@@ -1,5 +1,7 @@
 package se.nackademin;
 
+import java.util.Arrays;
+
 
 /**
  * The gameboard where pieces are placed.
@@ -90,6 +92,20 @@ public class Board {
 			return PlacementState.OCCUPIED;
 		this.grid[y][x] = square;
 		return PlacementState.SUCCESS;
+	}
+
+	/**
+	 * Checks wether the board is full.
+	 * @return a boolean indicating if such is the case.
+	 */
+	public boolean isTied() {
+		for (Square[] row : this.grid) {
+			for (Square square : row) {
+				if (square == Square.AVAILABLE)
+					return false;
+			}
+		}
+		return true;
 	}
 
 	/**
