@@ -86,4 +86,25 @@ public class BoardTest {
 		assertFalse(won);
 	}
 
+	@Test
+	public void isTiedShouldReturnTrueOnFullBoard() {
+		Board board = new Board(2);
+		board.tryToPlace(0,0, Square.CIRCLE);
+		board.tryToPlace(0,1, Square.CIRCLE);
+		board.tryToPlace(1,0, Square.CIRCLE);
+		board.tryToPlace(1,1, Square.CROSS);
+		boolean tie = board.isTied();
+		assertTrue(tie);
+	}
+
+	@Test
+	public void isTiedShouldReturnFalseOnNotFullBoard() {
+		Board board = new Board(2);
+		board.tryToPlace(0,0, Square.CIRCLE);
+		board.tryToPlace(0,1, Square.CIRCLE);
+		board.tryToPlace(1,1, Square.CROSS);
+		boolean tie = board.isTied();
+		assertFalse(tie);
+	}
+
 }
