@@ -17,7 +17,7 @@ public class Play extends GenericPlay {
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
 		this.playerList.add(new Human());
-		this.playerList.add(new AI());
+		this.playerList.add(new AI(Square.CROSS));
 	}
 
 	public enum PlayerWin {

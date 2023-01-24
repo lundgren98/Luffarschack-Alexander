@@ -25,7 +25,8 @@ public class Board {
 	public enum Square {
 		AVAILABLE,
 		CIRCLE,
-		CROSS;
+		CROSS,
+		OUT_OF_BOUNDS;
 		boolean isOccupied() {
 			return (this != AVAILABLE);
 		}
@@ -53,6 +54,14 @@ public class Board {
 	Board(int size) {
 		this.size = size;
 		this.prepareGrid();
+	}
+
+	public Square getSquare(int x, int y) {
+		try {
+			return this.grid[y][x];
+		} catch (IndexOutOfBoundsException e) {
+			return Square.OUT_OF_BOUNDS;
+		}
 	}
 
 	/**
