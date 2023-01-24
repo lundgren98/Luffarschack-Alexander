@@ -9,12 +9,20 @@ import java.lang.Math;
 
 import se.nackademin.Board.Square;
 
+/**
+ * A computer player for the game.
+ */
 public class AI implements Player {
 
 	private Square me;
 	private Square opponent;
 	private Streak longestStreak;
 
+	/**
+	 * Create a computer player.
+	 * @param piece the type of piece the computer should play with.
+	 * Assumes the opponent plays with the opposite piece.
+	 */
 	public AI(Square piece) {
 		this.me = piece;
 		this.opponent = (piece == Square.CIRCLE)
@@ -22,6 +30,11 @@ public class AI implements Player {
 			: Square.CIRCLE;
 	}
 
+	/**
+	 * Ask the AI for cordinates to place on the board.
+	 * @param board the board to be played on.
+	 * @return a tuple of the form [column, row]
+	 */
 	public int[] selectPlacement(Board board) {
 		this.calculateStreaks(board);
 		if (this.longestStreak.length < 0)

@@ -3,6 +3,9 @@ package se.nackademin;
 import java.util.Scanner;
 import java.util.Arrays;
 
+/**
+ * A human player.
+ */
 public class Human implements Player {
 	private Scanner sc = new Scanner(System.in);
 

@@ -12,6 +12,9 @@ import se.nackademin.Board.Square;
  */
 public class Play extends GenericPlay {
 
+	/**
+	 * Create a new game between a Human and an AI.
+	 */
 	public Play() {
 		this.fio = new FileIO();
 		this.board = new Board(5);
@@ -20,10 +23,29 @@ public class Play extends GenericPlay {
 		this.playerList.add(new AI(Square.CROSS));
 	}
 
+	/**
+	 * Indicates the state game.
+	 * {@see #FALSE}
+	 * {@see #CIRCLE}
+	 * {@see #CROSS}
+	 * {@see #TIE}
+	 */
 	public enum PlayerWin {
+		/**
+		 * No one has won.
+		 */
 		FALSE,
+		/**
+		 * Circle has won.
+		 */
 		CIRCLE,
+		/**
+		 * Cross has won.
+		 */
 		CROSS,
+		/**
+		 * There is a tie between the players.
+		 */
 		TIE
 	}
 

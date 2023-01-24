@@ -9,24 +9,55 @@ import java.util.Arrays;
 public class Board {
 	/**
 	 * enum indicating the state of a placement on the board.
-	 * SUCCESS: A piece can be placed.
-	 * OCCUPIED: A piece is already placed.
-	 * OUT_OF_BOUNDS: A piece is placed outside of the board.
+	 * {@see #SUCCESS}
+	 * {@see #OCCUPIED}
+	 * {@see #OUT_OF_BOUNDS}
 	 */
 	public enum PlacementState {
+		/**
+		 * The piece can be successfully placed here.
+		 */
 		SUCCESS,
+		/**
+		 * This place is occupied.
+		 * Pieces cannot be placed here.
+		 */
 		OCCUPIED,
+		/**
+		 * This place is outside of the board.
+		 * Pieces cannot be placed here.
+		 */
 		OUT_OF_BOUNDS
 	}
 
 	/**
 	 * enum indicating if a square is has a piece on it or is available.
+	 * {@see #AVAILABLE}
+	 * {@see #CIRCLE}
+	 * {@see #CROSS}
+	 * {@see #OUT_OF_BOUNDS}
 	 */
 	public enum Square {
+		/**
+		 * No piece.
+		 */
 		AVAILABLE,
+		/**
+		 * A circle piece.
+		 */
 		CIRCLE,
+		/**
+		 * A cross piece. 
+		 */
 		CROSS,
+		/**
+		 * In a foreign realm.
+		 */
 		OUT_OF_BOUNDS;
+		/**
+		 * Is a piece already placed on this square of the board?
+		 * @return true if such is the case, otherwise false.
+		 */
 		boolean isOccupied() {
 			return (this != AVAILABLE);
 		}
@@ -44,6 +75,10 @@ public class Board {
 	private static final int WINNING_STREAK = 4;
 
 	private int size = 1;
+	/**
+	 * Get the size in tiles of the square board.
+	 * @return the size.
+	 */
 	public int getSize() { return this.size; }
 	private Square[][] grid;
 
@@ -56,6 +91,13 @@ public class Board {
 		this.prepareGrid();
 	}
 
+	/**
+	 * Get the square on the cordinates of the board.
+	 * @param x the column
+	 * @param y the row 
+	 * @return a Square enum indicating the state of the square.
+	 * OUT_OF_BOUNDS if the parameters are outise of the board.
+	 */
 	public Square getSquare(int x, int y) {
 		try {
 			return this.grid[y][x];
