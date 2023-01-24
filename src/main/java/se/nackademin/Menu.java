@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * A menu giving the option to play a game or watch a previous one.
+ */
 public class Menu implements Runnable {
 	Scanner sc = new Scanner(System.in);
 	private Play game = new Play();
@@ -17,6 +20,9 @@ public class Menu implements Runnable {
 		choiceList.add(replay);
 		choiceNameList.add("Watch a Previous Game");
 	}
+	/**
+	 * Start the menu.
+	 */
 	public void run() {
 		showStats();
 		System.out.println(showChoices());

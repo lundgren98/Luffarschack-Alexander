@@ -7,12 +7,22 @@ import java.util.NoSuchElementException;
 
 import se.nackademin.Board.Square;
 
+/**
+ * A game played between two {@link se.nackademin.ReplayPlayer}s.
+ */
 public class showReplay extends GenericPlay {
+	/**
+	 * A game played between two {@link se.nackademin.ReplayPlayer}s.
+	 */
 	public showReplay() {
 		this.fio = new FileIO();
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
 	}
+
+	/**
+	 * Run the replay.
+	 */
 	public void run() {
 		this.preparePlayers();
 		try {
