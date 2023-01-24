@@ -40,6 +40,17 @@ public class AI implements Player {
 			this.y = y;
 		}
 
+		// For mutability
+		public void set(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public void set(Point p) {
+			this.x = p.x;
+			this.y = p.y;
+		}
+
 		public boolean isInBounds(int lower, int upper) {
 			return (
 				this.x >= lower &&
@@ -90,12 +101,12 @@ public class AI implements Player {
 			return retVal;
 		}
 	}
+
 	private class Streak implements Comparable<Streak> {
 		private int length;
 		private List<Point> edges;
 
 		public int getLength() { return this.length; }
-		public List<Point> getEdges() { return this.edges; }
 
 		public int compareTo(Streak other) {
 			return this.getLength() - other.getLength();
@@ -139,138 +150,70 @@ public class AI implements Player {
 
 	private void calculateStreaks(Board board) {
 		this.longestStreak = new Streak();
-		this.calculateHorizontalStreaks(board);
-		this.calculateVerticalStreaks(board);
-		this.calculatePosDiagStreaks(board);
-		this.calculateNegDiagStreaks(board);
-	}
-
-	private void calculateHorizontalStreaks(Board board) {
 		int size = board.getSize();
-		Point p1 = new Point(-1,-1);
-		Point p2 = new Point(-1,-1);
-		Streak localStreak;
-		for (int y = 0; y < size; y++) {
-			p1 = new Point(-1,-1);
-			for (int x = 0; x <= size; x++) {
-				if (board.getSquare(x, y) == this.opponent) {
-					if (!p1.isInBounds(size))
-						p1 = new Point(x,y);
-					continue;
-				}
-				if (board.getSquare(x, y) == this.me) {
-					p1 = new Point(-1,-1);
-					p2 = new Point(-1,-1);
-					continue;
-				}
-				if (!p1.isInBounds(size))
-					continue;
-				p2 = new Point(x - 1, y);
-				localStreak = new Streak(p1, p2, size);
-				localStreak.filterEdges(p -> board.getSquare(p.x, p.y) == Square.AVAILABLE);
-				if (this.longestStreak.compareTo(localStreak) < 0 &&
-					localStreak.edges.size() > 0)
-					this.longestStreak = localStreak;
-				p1 = new Point(-1,-1);
-			}
-		}
-	}
-
-	private void calculateVerticalStreaks(Board board) {
-		int size = board.getSize();
-		Point p1 = new Point(-1,-1);
-		Point p2 = new Point(-1,-1);
-		Streak localStreak;
-		for (int x = 0; x < size; x++) {
-			p1 = new Point(-1,-1);
-			for (int y = 0; y <= size; y++) {
-				if (board.getSquare(x, y) == this.opponent) {
-					if (!p1.isInBounds(size))
-						p1 = new Point(x,y);
-					continue;
-				}
-				if (board.getSquare(x, y) == this.me) {
-					p1 = new Point(-1,-1);
-					p2 = new Point(-1,-1);
-					continue;
-				}
-				if (!p1.isInBounds(size))
-					continue;
-				p2 = new Point(x, y - 1);
-				localStreak = new Streak(p1, p2, size);
-				localStreak.filterEdges(p -> board.getSquare(p.x, p.y) == Square.AVAILABLE);
-				if (this.longestStreak.compareTo(localStreak) < 0 &&
-					localStreak.edges.size() > 0)
-					this.longestStreak = localStreak;
-				p1 = new Point(-1,-1);
-			}
-		}
-	}
-
-	private void calculatePosDiagStreaks(Board board) {
-		int size = board.getSize();
-		Point p1 = new Point(-1,-1);
-		Point p2 = new Point(-1,-1);
-		Streak localStreak;
-		for (int y = size - 1; y >= 0; y--) {
-			p1 = new Point(-1,-1);
+		Point rowPoint2     = new Point(-1,-1);
+		Point colPoint2     = new Point(-1,-1);
+		Point posDiagPoint2 = new Point(-1,-1);
+		Point negDiagPoint2 = new Point(-1,-1);
+		Point rowOffset     = new Point(-1, 0);
+		Point colOffset     = new Point(0 ,-1);
+		Point posDiagOffset = new Point(-1,-1);
+		Point negDiagOffset = new Point(-1,+1);
+		for (int y = 0; y <= size; y++) {
+			Point rowPoint1     = new Point(-1,-1);
+			Point colPoint1     = new Point(-1,-1);
+			Point posDiagPoint1 = new Point(-1,-1);
+			Point negDiagPoint1 = new Point(-1,-1);
 			int x;
-			for (x = 0; x <= size && y <= size; x++, y++) {
-				if (board.getSquare(x, y) == this.opponent) {
-					if (!p1.isInBounds(size))
-						p1 = new Point(x,y);
-					continue;
-				}
-				if (board.getSquare(x, y) == this.me) {
-					p1 = new Point(-1,-1);
-					p2 = new Point(-1,-1);
-					continue;
-				}
-				if (!p1.isInBounds(size))
-					continue;
-				p2 = new Point(x - 1, y - 1);
-				localStreak = new Streak(p1, p2, size);
-				localStreak.filterEdges(p -> board.getSquare(p.x, p.y) == Square.AVAILABLE);
-				if (this.longestStreak.compareTo(localStreak) < 0 &&
-					localStreak.edges.size() > 0)
-					this.longestStreak = localStreak;
-				p1 = new Point(-1,-1);
+			int posDiagY = size - y;
+			for (x = 0; x <= size; x++, posDiagY++) {
+				Point currentRowPoint     = new Point(x, y);
+				Point currentColPoint     = new Point(y, x);
+				Point currentPosDiagPoint = new Point(x, posDiagY);
+				Point currentNegDiagPoint = new Point(x, size - posDiagY);
+				this.updateStreak(currentRowPoint,
+						rowPoint1, rowPoint2,
+						rowOffset, board);
+				this.updateStreak(currentColPoint,
+						colPoint1, colPoint2,
+						colOffset, board);
+				this.updateStreak(currentPosDiagPoint,
+						posDiagPoint1, posDiagPoint2,
+						posDiagOffset, board);
+				this.updateStreak(currentNegDiagPoint,
+						negDiagPoint1, negDiagPoint2,
+						negDiagOffset, board);
 			}
-			y -= x;
 		}
 	}
 
-	private void calculateNegDiagStreaks(Board board) {
+	private void updateStreak(Point currentPoint,
+			Point p1, Point p2,
+			Point offset,
+			Board board)
+	{
+		int x = currentPoint.x;
+		int y = currentPoint.y;
 		int size = board.getSize();
-		Point p1 = new Point(-1,-1);
-		Point p2 = new Point(-1,-1);
-		Streak localStreak;
-		for (int y = 0; y < size; y++) {
-			p1 = new Point(-1,-1);
-			int x;
-			for (x = 0; x <= size && y >= -1; x++, y--) {
-				if (board.getSquare(x, y) == this.opponent) {
-					if (!p1.isInBounds(size))
-						p1 = new Point(x,y);
-					continue;
-				}
-				if (board.getSquare(x, y) == this.me) {
-					p1 = new Point(-1,-1);
-					p2 = new Point(-1,-1);
-					continue;
-				}
-				if (!p1.isInBounds(size))
-					continue;
-				p2 = new Point(x - 1, y + 1);
-				localStreak = new Streak(p1, p2, size);
-				localStreak.filterEdges(p -> board.getSquare(p.x, p.y) == Square.AVAILABLE);
-				if (this.longestStreak.compareTo(localStreak) < 0 &&
-					localStreak.edges.size() > 0)
-					this.longestStreak = localStreak;
-				p1 = new Point(-1,-1);
-			}
-			y += x;
+		if (board.getSquare(x, y) == this.opponent) {
+			if (!p1.isInBounds(size))
+				p1.set(x,y);
+			return;
 		}
+		if (board.getSquare(x, y) == this.me) {
+			p1.set(-1,-1);
+			p2.set(-1,-1);
+			return;
+		}
+		if (!p1.isInBounds(size))
+			return;
+		p2.set(currentPoint.plus(offset));
+		Streak localStreak = new Streak(p1, p2, size);
+		localStreak.filterEdges(p -> board.getSquare(p.x, p.y) == Square.AVAILABLE);
+		if (this.longestStreak.compareTo(localStreak) < 0 &&
+			localStreak.edges.size() > 0)
+			this.longestStreak = localStreak;
+		p1.set(-1,-1);
 	}
 
 	private int[] getRandomCordinates(Board board) {
