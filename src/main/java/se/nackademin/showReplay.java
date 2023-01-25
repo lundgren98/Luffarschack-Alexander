@@ -24,13 +24,15 @@ public class showReplay extends GenericPlay {
 	 * Run the replay.
 	 */
 	public void run() {
-		this.preparePlayers();
+		if (!this.preparePlayers())
+			return;
 		try {
 			while (true) {
 				this.playersTakeTurns();
 			}
 		} catch (NoSuchElementException e) { }
 	}
+
 	private void playersTakeTurns() {
 		boolean firstPlayerTurn = true;
 		for (Player player : this.playerList) {
@@ -43,13 +45,13 @@ public class showReplay extends GenericPlay {
 			System.out.println(this.board);
 		}
 	}
-	private void preparePlayers() {
+	private boolean preparePlayers() {
 		List<Turn> allTurns;
 		try {
 			allTurns = fio.ReadTurnsFromFile();
 		} catch (IOException e) {
-			e.printStackTrace();
-			return;
+			System.out.println("Could not read game data.");
+			return false;
 		}
 		List<Turn> firstPlayerTurns = allTurns.stream()
 			.filter(t -> t.getPiece() == Square.CIRCLE)
@@ -59,5 +61,6 @@ public class showReplay extends GenericPlay {
 			.toList();
 		this.playerList.add(new ReplayPlayer(firstPlayerTurns));
 		this.playerList.add(new ReplayPlayer(secondPlayerTurns));
+		return true;
 	}
 }

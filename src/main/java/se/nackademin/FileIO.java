@@ -52,7 +52,7 @@ public class FileIO {
 		int fileNumber = dir.toFile().list().length;
 		Path path = Paths.get(
 				SAVES_FILE_PREFIX
-				+ Integer.toString(fileNumber)
+				+ ((fileNumber == 0) ? "" : Integer.toString(fileNumber))
 				+ ".csv");
 		List<String> lines = turnListToStringList(turns);
 		saveLinesToFile(lines, path);
