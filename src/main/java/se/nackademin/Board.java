@@ -67,6 +67,7 @@ public class Board {
 				case AVAILABLE: return ".";
 				case CIRCLE: return "O";
 				case CROSS: return "X";
+				case OUT_OF_BOUNDS: return "?";
 				default: return "Something went awfully wrong!";
 			}
 		}
@@ -117,12 +118,27 @@ public class Board {
 				this.grid[y][x] = Square.AVAILABLE;
 	}
 
+	private int highlightX = 0;
+	private int highlightY = 0;
+	public int getHighlightX() { return highlightX; }
+	public int getHighlightY() { return highlightY; }
+	public void setHighlight(int x, int y) {
+		this.highlightX = x;
+		this.highlightY = y;
+	}
+	private static final String ANSI_RESET  = "\u001B[0m";
+	private static final String ANSI_RED    = "\u001B[31m";
+
 	@Override
 	public String toString() {
 		String retVal = "";
-		for (Square[] row : this.grid) {
-			for (Square square : row) {
-				retVal += square.toString();
+		for (int y = 0; y < this.size; y++) {
+			for (int x = 0; x < this.size; x++) {
+				if (x == this.highlightX && y == highlightY)
+					retVal += ANSI_RED;
+				retVal += this.getSquare(x,y).toString();
+				if (x == this.highlightX && y == highlightY)
+					retVal += ANSI_RESET;
 			}
 			retVal += "\n";
 		}

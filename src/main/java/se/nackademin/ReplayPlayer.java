@@ -2,11 +2,13 @@ package se.nackademin;
 
 import java.util.List;
 import java.util.Iterator;
+import java.util.Scanner;
 
 /**
  * A player who only plays the games given to him by a list of {@link se.nackademin.Turn}s.
  */
 public class ReplayPlayer implements Player {
+	Scanner sc = new Scanner(System.in);
 	private Iterator<Turn> turns;
 	/**
 	 * A player who only plays what you tell him to play.
@@ -23,6 +25,7 @@ public class ReplayPlayer implements Player {
 	 */
 	public int[] selectPlacement(Board board) {
 		Turn turn = turns.next();
+		sc.nextLine();
 		return new int[] { turn.getCol(), turn.getRow() };
 	}
 }
