@@ -60,7 +60,6 @@ public class Menu implements Runnable {
 		try {
 			data = fio.ReadStatsFromFIle();
 		} catch (IOException e) {
-			e.printStackTrace();
 			return;
 		}
 		int totalNumberOfGames = data.size();
