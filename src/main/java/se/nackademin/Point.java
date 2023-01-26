@@ -9,8 +9,7 @@ public class Point {
   public int y;
 
   public Point() {
-    this.x = -1;
-    this.y = -1;
+    this.invalidate();
   }
 
   public Point(int x, int y) {
@@ -27,6 +26,11 @@ public class Point {
   public void set(Point p) {
     this.x = p.x;
     this.y = p.y;
+  }
+
+  public void invalidate() {
+    this.x = -1;
+    this.y = -1;
   }
 
   public boolean isInBounds(int lower, int upper) {

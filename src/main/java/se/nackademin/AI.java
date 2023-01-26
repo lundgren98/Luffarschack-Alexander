@@ -139,8 +139,8 @@ public class AI implements Player {
 			return;
 		}
 		if (board.getSquare(x, y) == this.me) {
-			p1.set(new Point());
-			p2.set(new Point());
+			p1.invalidate();
+			p2.invalidate();
 			return;
 		}
 		if (!p1.isInBounds(size))
@@ -151,7 +151,7 @@ public class AI implements Player {
 		if (this.longestStreak.compareTo(localStreak) < 0 &&
 			localStreak.edges.size() > 0)
 			this.longestStreak = localStreak;
-		p1.set(new Point());
+		p1.invalidate();
 	}
 
 	private Point getRandomCordinates(Board board) {
