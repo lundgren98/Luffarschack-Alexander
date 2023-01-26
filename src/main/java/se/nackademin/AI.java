@@ -1,13 +1,11 @@
 package se.nackademin;
 
-import java.util.Random;
-import java.util.stream.IntStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
-import java.lang.Math;
-
 import se.nackademin.Board.Square;
+
+import java.util.ArrayList;
+import java.util.function.Predicate;
+import java.util.List;
+import java.util.Random;
 
 /**
  * A computer player for the game.
@@ -35,84 +33,11 @@ public class AI implements Player {
 	 * @param board the board to be played on.
 	 * @return a tuple of the form [column, row]
 	 */
-	public int[] selectPlacement(Board board) {
+	public Point selectPlacement(Board board) {
 		this.calculateStreaks(board);
 		if (this.longestStreak.length < 0)
 			return getRandomCordinates(board);
-		Point p = this.longestStreak.edges.get(0);
-		return new int[] { p.x, p.y };
-	}
-
-	private class Point {
-
-		public int x;
-		public int y;
-
-		public Point(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		// For mutability
-		public void set(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		public void set(Point p) {
-			this.x = p.x;
-			this.y = p.y;
-		}
-
-		public boolean isInBounds(int lower, int upper) {
-			return (
-				this.x >= lower &&
-				this.y >= lower &&
-				this.x < upper &&
-				this.y < upper
-				);
-		}
-
-		public boolean isInBounds(int upper) {
-			return this.isInBounds(0, upper);
-		}
-
-		public int distance(Point other) {
-			return Math.max(Math.abs(this.x - other.x),
-					Math.abs(this.y - other.y));
-		}
-
-		public Point plus(Point other) {
-			return new Point(this.x + other.x, this.y + other.y);
-		}
-
-		public Point minus(Point other) {
-			return new Point(this.x - other.x, this.y - other.y);
-		}
-
-		public Point direction(Point other) {
-			int dx = (this.x == other.x) ? 0
-				: (this.x < other.x) ? 1 : -1;
-			int dy = (this.y == other.y) ? 0
-				: (this.y < other.y) ? 1 : -1;
-			return new Point(dx, dy);
-		}
-
-		public boolean equals(Point other) {
-			return (this.x == other.x && this.y == other.y);
-		}
-
-		public List<Point> getNeighbours() {
-			List<Point> retVal = new ArrayList<Point>();
-			for (int y = -1; y <= 1; y++) {
-				for (int x = -1; x <= 1; x++) {
-					if (x == 0 && y == 0)
-						continue;
-					retVal.add(this.plus(new Point(x,y)));
-				}
-			}
-			return retVal;
-		}
+		return this.longestStreak.edges.get(0);
 	}
 
 	private class Streak implements Comparable<Streak> {
@@ -164,19 +89,19 @@ public class AI implements Player {
 	private void calculateStreaks(Board board) {
 		this.longestStreak = new Streak();
 		int size = board.getSize();
-		Point rowPoint2     = new Point(-1,-1);
-		Point colPoint2     = new Point(-1,-1);
-		Point posDiagPoint2 = new Point(-1,-1);
-		Point negDiagPoint2 = new Point(-1,-1);
+		Point rowPoint2     = new Point();
+		Point colPoint2     = new Point();
+		Point posDiagPoint2 = new Point();
+		Point negDiagPoint2 = new Point();
 		Point rowOffset     = new Point(-1, 0);
 		Point colOffset     = new Point(0 ,-1);
 		Point posDiagOffset = new Point(-1,-1);
 		Point negDiagOffset = new Point(-1,+1);
 		for (int y = 0; y <= size; y++) {
-			Point rowPoint1     = new Point(-1,-1);
-			Point colPoint1     = new Point(-1,-1);
-			Point posDiagPoint1 = new Point(-1,-1);
-			Point negDiagPoint1 = new Point(-1,-1);
+			Point rowPoint1     = new Point();
+			Point colPoint1     = new Point();
+			Point posDiagPoint1 = new Point();
+			Point negDiagPoint1 = new Point();
 			int x;
 			int posDiagY = size - y;
 			for (x = 0; x <= size; x++, posDiagY++) {
@@ -214,8 +139,8 @@ public class AI implements Player {
 			return;
 		}
 		if (board.getSquare(x, y) == this.me) {
-			p1.set(-1,-1);
-			p2.set(-1,-1);
+			p1.set(new Point());
+			p2.set(new Point());
 			return;
 		}
 		if (!p1.isInBounds(size))
@@ -226,13 +151,13 @@ public class AI implements Player {
 		if (this.longestStreak.compareTo(localStreak) < 0 &&
 			localStreak.edges.size() > 0)
 			this.longestStreak = localStreak;
-		p1.set(-1,-1);
+		p1.set(new Point());
 	}
 
-	private int[] getRandomCordinates(Board board) {
+	private Point getRandomCordinates(Board board) {
 		Random rand = new Random();
 		int x = rand.nextInt(board.getSize());
 		int y = rand.nextInt(board.getSize());
-		return new int[] { x, y };
+		return new Point(x, y);
 	}
 }

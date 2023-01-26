@@ -1,11 +1,11 @@
 package se.nackademin;
 
+import se.nackademin.Board.Square;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import se.nackademin.Board.Square;
 
 /**
  * A game played between two {@link se.nackademin.ReplayPlayer}s.
@@ -39,8 +39,8 @@ public class ShowReplay extends GenericPlay {
 			Square square = (firstPlayerTurn)
 				? Square.CIRCLE
 				: Square.CROSS;
-			int[] pos = player.selectPlacement(this.board);
-			this.board.tryToPlace(pos[0], pos[1], square);
+			Point pos = player.selectPlacement(this.board);
+			this.board.tryToPlace(pos.x, pos.y, square);
 			firstPlayerTurn = !firstPlayerTurn;
 			System.out.println(this.board);
 		}

@@ -10,5 +10,5 @@ public interface Player {
 	 * @return an integer array indicating a place on the board.
 	 * @see se.nackademin.Board
 	 */
-	public int[] selectPlacement(Board board);
+	public Point selectPlacement(Board board);
 }

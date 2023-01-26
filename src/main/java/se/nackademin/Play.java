@@ -1,11 +1,11 @@
 package se.nackademin;
 
+import se.nackademin.Board.PlacementState;
+import se.nackademin.Board.Square;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import se.nackademin.Board.PlacementState;
-import se.nackademin.Board.Square;
 
 /**
  * A class to play a game of four in a row.
@@ -92,14 +92,14 @@ public class Play extends GenericPlay {
 	 * @return a boolean indicating if the player has won.
 	 */
 	private PlayerWin aPlayerTurn(Player player, Square square) {
-		int[] pos;
-		PlacementState placement;
+		Point placement;
+		PlacementState placementState;
 		System.out.println(this.board);
 		do {
-			pos = player.selectPlacement(this.board);
-			placement = this.board.tryToPlace(pos[0], pos[1], square);
-		} while (placement != PlacementState.SUCCESS);
-		this.turns.add(new Turn(square, pos[1], pos[0]));
+			placement = player.selectPlacement(this.board);
+			placementState = this.board.tryToPlace(placement.x, placement.y, square);
+		} while (placementState != PlacementState.SUCCESS);
+		this.turns.add(new Turn(square, placement.y, placement.x));
 		if (this.board.isTied())
 			return PlayerWin.TIE;
 		if (this.board.hasWon(square))

@@ -1,6 +1,5 @@
 package se.nackademin;
 
-import java.util.Arrays;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.OptionalInt;
@@ -17,7 +16,7 @@ public class Human implements Player {
 	 * Lets the user select a square on the board to place his piece on.
 	 * @return the cordinates for the piece.
 	 */
-	public int[] selectPlacement(Board board) {
+	public Point selectPlacement(Board board) {
 		Terminal term;
 		try {
 			term = TerminalBuilder.builder()
@@ -27,7 +26,7 @@ public class Human implements Player {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
-			return new int[] { -1, -1 };
+			return new Point();
 		}
 		term.enterRawMode();
 		read = term.reader();
@@ -68,9 +67,9 @@ public class Human implements Player {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
-			return new int[] { -1, -1 };
+			return new Point(-1, -1);
 		}
-		return new int[] { x, y };
+		return new Point(x, y);
 	}
 
 	/**
@@ -83,38 +82,5 @@ public class Human implements Player {
 		} catch (IOException e) {
 			return OptionalInt.empty();
 		}
-	}
-
-	/**
-	 * Checks wether the string is of the form "x:y" where x and y
-	 * are integers
-	 * @param str the string which is checked.
-	 * @return a boolean indicating if such is the case.
-	 */
-	private boolean isInputValid(String str) {
-		String[] splt = str.split(":");
-		if (splt.length != 2)
-			return false;
-		try {
-			for (String s : splt) {
-				Integer.parseInt(s);
-			}
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Converts strings of the form "x:y" to an integer array { x, y }
-	 * @param str the string to be converted.
-	 * @return an integer array of length 2 indicating the cordinates.
-	 */
-	private int[] stringToCordinates(String str) {
-		return Arrays.asList(str.split(":"))
-			.stream()
-			.map(s -> Integer.parseInt(s))
-			.mapToInt(i -> i)
-			.toArray();
 	}
 }

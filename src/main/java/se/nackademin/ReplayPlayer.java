@@ -23,9 +23,9 @@ public class ReplayPlayer implements Player {
 	 * Gives the cordinates to the play he wants to do.
 	 * @return an integer array on the form [column, row].
 	 */
-	public int[] selectPlacement(Board board) {
+	public Point selectPlacement(Board board) {
 		Turn turn = turns.next();
 		sc.nextLine();
-		return new int[] { turn.getCol(), turn.getRow() };
+		return new Point(turn.getCol(), turn.getRow());
 	}
 }

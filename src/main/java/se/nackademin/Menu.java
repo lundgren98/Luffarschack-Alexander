@@ -9,44 +9,49 @@ import java.util.Scanner;
  * A menu giving the option to play a game or watch a previous one.
  */
 public class Menu implements Runnable {
-	Scanner sc = new Scanner(System.in);
+	class Choice {
+		public GenericPlay play;
+		public String description;
+		public Choice(GenericPlay play, String description) {
+			this.play = play;
+			this.description = description;
+		}
+	}
+
+	private Scanner sc = new Scanner(System.in);
 	private Play game = new Play();
 	private ShowReplay replay = new ShowReplay();
-	private List<GenericPlay> choiceList = new ArrayList<GenericPlay>();
-	private List<String> choiceNameList = new ArrayList<String>();
+	private List<Choice> choices = new ArrayList<Choice>();
 	Menu() {
-		choiceList.add(game);
-		choiceNameList.add("New Game");
-		choiceList.add(replay);
-		choiceNameList.add("Watch a Previous Game");
+		choices.add(new Choice(game, "New Game"));
+		choices.add(new Choice(replay, "Watch a Previous Game"));
 	}
 	/**
 	 * Start the menu.
 	 */
 	public void run() {
 		showStats();
-		System.out.println(showChoices());
+		System.out.println(getChoiceDescriptions());
 		selectChoices();
 	}
-	private String showChoices() {
-		String retVal = "";
-		for (int i = 0; i < choiceNameList.size(); i++) {
-			retVal += Integer.toString(i + 1) + "\t" + choiceNameList.get(i) + "\n";
+	private String getChoiceDescriptions() {
+		String descriptions = "";
+		for (int i = 0; i < choices.size(); i++) {
+			descriptions += Integer.toString(i + 1) + "\t" + choices.get(i).description + "\n";
 		}
-		return retVal;
+		return descriptions;
 	}
 	private void selectChoices() {
 		String input;
 		do {
 			input = sc.nextLine();
-		} while (!inputIsValid(input));
-		choiceList.get(Integer.parseInt(input) - 1).run();
+		} while (!isValidInput(input));
+		choices.get(Integer.parseInt(input) - 1).play.run();
 	}
-	private boolean inputIsValid(String input) {
-		int i = 0;
+	private boolean isValidInput(String input) {
 		try {
-			i = Integer.parseInt(input);
-			choiceList.get(i - 1);
+			int i = Integer.parseInt(input);
+			choices.get(i - 1);
 		} catch (NumberFormatException e) {
 			return false;
 		} catch (IndexOutOfBoundsException e) {
@@ -73,7 +78,6 @@ public class Menu implements Runnable {
 			.average()
 			.orElse(-1.0);
 		System.out.printf("Average moves per game: %f\n", avg);
-		System.out.printf("Circle wins: %d out of %d\n",
-				circleWins, totalNumberOfGames);
+		System.out.printf("Circle wins: %d out of %d\n", circleWins, totalNumberOfGames);
 	}
 }

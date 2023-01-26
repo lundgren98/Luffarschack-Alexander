@@ -1,8 +1,5 @@
 package se.nackademin;
 
-import java.util.Arrays;
-
-
 /**
  * The gameboard where pieces are placed.
  */

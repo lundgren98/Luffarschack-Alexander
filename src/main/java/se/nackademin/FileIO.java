@@ -1,17 +1,15 @@
 package se.nackademin;
 
-import se.nackademin.Play.PlayerWin;
 import se.nackademin.Board.Square;
-import java.util.List;
-import java.util.ArrayList;
+import se.nackademin.Play.PlayerWin;
+
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A helper class for reading and writing gamedata to csv files.
