@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class Menu implements Runnable {
 	Scanner sc = new Scanner(System.in);
 	private Play game = new Play();
-	private showReplay replay = new showReplay();
+	private ShowReplay replay = new ShowReplay();
 	private List<GenericPlay> choiceList = new ArrayList<GenericPlay>();
 	private List<String> choiceNameList = new ArrayList<String>();
 	Menu() {
@@ -58,7 +58,7 @@ public class Menu implements Runnable {
 		FileIO fio = new FileIO();
 		List<String[]> data;
 		try {
-			data = fio.ReadStatsFromFIle();
+			data = fio.readStatsFromFile();
 		} catch (IOException e) {
 			return;
 		}

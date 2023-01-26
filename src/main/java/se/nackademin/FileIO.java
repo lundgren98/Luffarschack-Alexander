@@ -91,16 +91,16 @@ public class FileIO {
 	 * @return a list of {@link se.nackademin.Turn}s
 	 * @throws IOException if the file couldn't be read form.
 	 */
-	public List<Turn> ReadTurnsFromFile() throws IOException, IndexOutOfBoundsException {
+	public List<Turn> readTurnsFromFile() throws IOException, IndexOutOfBoundsException {
 		Path file = Paths.get(SAVES_FILE_PREFIX + ".csv");
 		return Files.readAllLines(file)
 			.stream()
 			.map(s -> s.split(","))
-			.map(arr -> strArrToTurn(arr))
+			.map(arr -> stringArrayToTurn(arr))
 			.toList();
 	}
 
-	private Turn strArrToTurn(String[] arr) throws IndexOutOfBoundsException {
+	private Turn stringArrayToTurn(String[] arr) throws IndexOutOfBoundsException {
 		String pieceStr = arr[0];
 		int row = Integer.parseInt(arr[2]);
 		int col = Integer.parseInt(arr[1]);
@@ -120,7 +120,7 @@ public class FileIO {
 	 * e.g. {"CROSS", "21"}.
 	 * @throws IOException if the file couldn't be read form.
 	 */
-	public List<String[]> ReadStatsFromFIle() throws IOException {
+	public List<String[]> readStatsFromFile() throws IOException {
 		Path file = Paths.get(STATS_FILE);
 		return Files.readAllLines(file)
 			.stream()

@@ -10,11 +10,11 @@ import se.nackademin.Board.Square;
 /**
  * A game played between two {@link se.nackademin.ReplayPlayer}s.
  */
-public class showReplay extends GenericPlay {
+public class ShowReplay extends GenericPlay {
 	/**
 	 * A game played between two {@link se.nackademin.ReplayPlayer}s.
 	 */
-	public showReplay() {
+	public ShowReplay() {
 		this.fio = new FileIO();
 		this.board = new Board(5);
 		this.playerList = new ArrayList<Player>();
@@ -48,7 +48,7 @@ public class showReplay extends GenericPlay {
 	private boolean preparePlayers() {
 		List<Turn> allTurns;
 		try {
-			allTurns = fio.ReadTurnsFromFile();
+			allTurns = fio.readTurnsFromFile();
 		} catch (IOException e) {
 			System.out.println("Could not read game data.");
 			return false;
