@@ -8,6 +8,9 @@ public class Point {
   public int x;
   public int y;
 
+  /**
+   * Creates an invalidated {@linkplain Point}
+   */
   public Point() {
     this.invalidate();
   }
@@ -28,6 +31,9 @@ public class Point {
     this.y = p.y;
   }
 
+  /**
+   * Sets x and y to -1
+   */
   public void invalidate() {
     this.x = -1;
     this.y = -1;

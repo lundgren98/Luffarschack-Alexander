@@ -86,7 +86,7 @@ public class FileIO {
 
 	/**
 	 * Reads a previous game file.
-	 * @return a list of {@link se.nackademin.Turn}s
+	 * @return a list of {@link se.nackademin.Turn}s.
 	 * @throws IOException if the file couldn't be read form.
 	 */
 	public List<Turn> readTurnsFromFile() throws IOException, IndexOutOfBoundsException {

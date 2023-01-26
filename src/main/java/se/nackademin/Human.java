@@ -14,7 +14,7 @@ public class Human implements Player {
 
 	/**
 	 * Lets the user select a square on the board to place his piece on.
-	 * @return the cordinates for the piece.
+	 * @return the coordinates for the piece.
 	 */
 	public Point selectPlacement(Board board) {
 		Terminal term;
@@ -73,8 +73,8 @@ public class Human implements Player {
 	}
 
 	/**
-	 * Read input from user
-	 * @return an Optional for ascii keycode for the key pressed.
+	 * Read input from user.
+	 * @return a {@link java.util.OptionalInt} for ASCII keycode for the key pressed.
 	 */
 	private OptionalInt getUserInput() {
 		try {

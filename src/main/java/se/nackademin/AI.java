@@ -29,9 +29,9 @@ public class AI implements Player {
 	}
 
 	/**
-	 * Ask the AI for cordinates to place on the board.
+	 * Ask the AI for coordinates to place on the board.
 	 * @param board the board to be played on.
-	 * @return a tuple of the form [column, row]
+	 * @return The {@link se.nackademin.Point} the AI placed the board.
 	 */
 	public Point selectPlacement(Board board) {
 		this.calculateStreaks(board);
